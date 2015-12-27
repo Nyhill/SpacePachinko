@@ -20,8 +20,9 @@ public class GameScreen implements Screen {
 
         world = new GameWorld(); // initialize world
         renderer = new GameRenderer(world); // initialize renderer
-        Sound sound = Gdx.audio.newSound(Gdx.files.internal("de.mp3"));
-         sound.play(1.0f);
+        //background music
+        //Sound sound = Gdx.audio.newSound(Gdx.files.internal("de.mp3"));
+        // sound.play(1.0f);
     }
 
     @Override

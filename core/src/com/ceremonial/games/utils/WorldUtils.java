@@ -30,14 +30,14 @@ public class WorldUtils {
     PolygonShape tempShape = new PolygonShape();
     tempFD.shape = tempShape;
 
-    tempShape.setAsBox(.1f, .1f, Constants.SHIP_VECTOR, 90);
+    tempShape.setAsBox(40f, 40f, Constants.SHIP_VECTOR, 90);
     spaceShip.position.set(Constants.SHIP_STARTPOS);
 
     Body ship = world.createBody(spaceShip);
     ship.createFixture(tempFD);
 
     Constants.shipSprite = new Sprite(new Texture("ship.png"));
-        Constants.shipSprite.setSize(.2f, .2f);
+        Constants.shipSprite.setSize(80f, 80f);
         Constants.shipSprite.setOrigin(Constants.shipSprite.getWidth() / 2, Constants.shipSprite.getHeight() / 2);
     ship.setUserData(Constants.shipSprite);
 
@@ -49,7 +49,7 @@ public class WorldUtils {
     public static Body createBomb(World world, float x){
         BodyDef bombDef = new BodyDef();
         bombDef.type = BodyDef.BodyType.DynamicBody;
-        bombDef.position.set(x, .85f);
+        bombDef.position.set(x, 1070f);
 
         //Ball shape
         CircleShape shape = new CircleShape();
@@ -58,16 +58,16 @@ public class WorldUtils {
         //ficture definition (physical properties)
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 2.5f;
-        fixtureDef.friction = 0.25f;
-        fixtureDef.restitution = 0.5f;
+        fixtureDef.density = 1500f;
+        fixtureDef.friction = .2f;
+        fixtureDef.restitution = .5f;
 
         Body bomb = world.createBody(bombDef);
         bomb.createFixture(fixtureDef);
         //bomb.setLinearVelocity(-9.81f,0);
 
         Constants.bombSprite = new Sprite(new Texture("bomb.png"));
-        Constants.bombSprite.setSize(.05f, .05f);
+        Constants.bombSprite.setSize(20f, 20f);
         Constants.bombSprite.setOrigin(Constants.bombSprite.getWidth() / 2, Constants.bombSprite.getHeight() / 2);
         bomb.setUserData(Constants.bombSprite);
         Fixture dataFix = bomb.createFixture(fixtureDef);
@@ -98,7 +98,7 @@ public class WorldUtils {
         //bomb.setLinearVelocity(-9.81f,0);
 
         Constants.asteroidSprite = new Sprite(new Texture("asteroid1.png"));
-        Constants.asteroidSprite.setSize(.05f, .05f);
+        Constants.asteroidSprite.setSize(30f, 30f);
         Constants.asteroidSprite.setOrigin(Constants.asteroidSprite.getWidth() / 2, Constants.asteroidSprite.getHeight() / 2);
         asteroid.setUserData(Constants.asteroidSprite);
         Fixture dataFix = asteroid.createFixture(fixtureDef);
@@ -129,7 +129,7 @@ public class WorldUtils {
         //bomb.setLinearVelocity(-9.81f,0);
 
         Constants.bhSprite = new Sprite(new Texture("bh.png"));
-        Constants.bhSprite.setSize(.12f, .12f);
+        Constants.bhSprite.setSize(40f, 40f);
         Constants.bhSprite.setOrigin(Constants.bhSprite.getWidth() / 2, Constants.bhSprite.getHeight() / 2);
         bh.setUserData(Constants.bhSprite);
         Fixture dataFix = bh.createFixture(fixtureDef);

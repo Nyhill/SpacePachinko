@@ -16,9 +16,6 @@ import com.ceremonial.games.world.GameWorld;
 
 public class SpaceRun extends Game {
 
-	SpriteBatch sb;
-	GameWorld GameWorld;
-	boolean isTouched;
 
 	@Override
 	public void create () {

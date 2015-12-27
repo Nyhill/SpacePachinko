@@ -34,33 +34,33 @@ public class GameWorld extends Stage {
     public static Array destroyBodies = new Array();
     public BitmapFont font;
 
-    //score stuff
-
-    private int score;
-    public String hits= "score" + score;
-
     public Array<Body> tmpBodies = new Array<Body>();
 
     public float shipX;
     boolean right;
     boolean left;
-    public int bombcount = 20;
     boolean bombs;
 
    public void GameWorld() {
-
+       //Create the world
        world = WorldUtils.createWorld();
+       //Create the ship
        ship = WorldUtils.createShip(world);
        world.setContactListener(new WorldContactListener());
-       camera = new OrthographicCamera();
+       //camera = new OrthographicCamera(800f, 900f);
+       font = new BitmapFont();
        B2DR = new Box2DDebugRenderer();
-       font = new BitmapFont(Gdx.files.internal("bmp.fnt"));
-       font.setColor(25,0,15,0);
-       font.getData().setScale(1,1);
-       Constants.backgroundSprite.setPosition(-1,-1);
-       Constants.backgroundSprite.setSize(2f, 2f);
+//Constants.APP_WIDTH/2 - Constants.backgroundSprite.getWidth()/2, Constants.APP_HEIGHT/2 - Constants.backgroundSprite.getHeight() / 2
+       Constants.backgroundSprite.setPosition(0,0);
+       Constants.backgroundSprite.setSize(Constants.APP_WIDTH, Constants.APP_HEIGHT);
+
+       camera = new OrthographicCamera(720, 1280);
+       camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
+       camera.update();
+
        asteroidBelt();
        blackHoleEnd();
+       B2DR.render(world, camera.combined);
 
    }
     private void shipControls(Body ship) {
@@ -70,12 +70,12 @@ public class GameWorld extends Stage {
         rightShip = new Texture("ship.png");
         shipX = ship.getPosition().x;
      //   Gdx.app.log("shipControls", "x is:" + shipX);
-        if(shipX <= -0.8){
+        if(shipX <= 0){
            // Gdx.app.log("shipControls", "x is:" + shipX);
             right = false;
             left = true;
         }
-        if(shipX >= 1){
+        if(shipX >= 720){
            // Gdx.app.log("turn", "ffs:" + shipX);
             left = false;
             right = true;
@@ -96,22 +96,28 @@ public class GameWorld extends Stage {
     }
     private void dropBomb() {
         if(Gdx.input.isTouched()) {
+            //Create a bomb when mouse is clicked / finger tap
             bomb = WorldUtils.createBomb(world, shipX);
 
-            if (bombcount > 0) {
+            if (Constants.bomb_count > 0) {
                 bombs = true;
             }
-            if (bombcount == 0) {
+            if (Constants.bomb_count  == 0) {
                 bombs = false;
             }
             if (bombs) {
-                bombcount -= 1;
+                Constants.bomb_count  -= 1;
             }
             if (!bombs) {
-                bombcount = 0;
-                bomb = null;
+                Constants.bomb_count  = 0;
+
+                world.destroyBody(bomb);
+
             }
-            Gdx.app.log("dropping bomb", "bobms left:" + bombcount);
+            if(bomb.getPosition().y < 0){
+                world.destroyBody(bomb);
+            }
+            //Gdx.app.log("dropping bomb", "bobms left:" + Constants.bomb_count );
            // checkCollision();
         }else{
 
@@ -119,39 +125,50 @@ public class GameWorld extends Stage {
     }
     public void asteroidBelt(){
         Texture asteroid2;
+        Texture asteroid3 = new Texture("asteroid3.png");
+
+        for(float i=10f; i< Constants.APP_WIDTH; i+=87f){
+            asteroid = WorldUtils.createAsteroid(world,i,850f);
+        }
+
+        for(float i=10f; i< Constants.APP_WIDTH; i+=200f){
+            asteroid = WorldUtils.createAsteroid(world,i,750f);
+            Constants.asteroidSprite.setTexture(asteroid3);
+        }
+
         //row 1 9
-        for(float i=-0.9f; i< 2; i+=0.20){
-            asteroid = WorldUtils.createAsteroid(world,i,0.5f);
+        for(float i=10f; i< Constants.APP_WIDTH; i+=87f){
+            asteroid = WorldUtils.createAsteroid(world,i,650f);
             }
 
-        for(float i=-0.85f; i<2 ; i+=0.50){
+        for(float i=10f; i < Constants.APP_WIDTH ; i+=200){
             asteroid2 = new Texture("asteroid2.png");
             Constants.asteroidSprite.setTexture(asteroid2);
-            asteroid = WorldUtils.createAsteroid(world,i,0.25f);
+            asteroid = WorldUtils.createAsteroid(world,i,550f);
 
         }
-        for(float i=-0.9f; i<2; i+=0.23){
-            asteroid = WorldUtils.createAsteroid(world,i,0.0f);
+        for(float i=10f; i < Constants.APP_WIDTH; i+=87){
+            asteroid = WorldUtils.createAsteroid(world,i,450f);
         }
-        for(float i=-0.9f; i<2; i+=0.60){
-            asteroid = WorldUtils.createAsteroid(world,i,-0.125f);
-        }
-
-        for(float i=-0.9f; i<2; i+=0.22){
-            asteroid = WorldUtils.createAsteroid(world,i,-0.25f);
-        }
-        for(float i=-0.9f; i<2; i+=0.30){
-            asteroid = WorldUtils.createAsteroid(world,i,-0.50f);
-        }
-        for(float i=-0.9f; i<2; i+=0.21){
-            asteroid = WorldUtils.createAsteroid(world, i, -0.75f);
+        for(float i=10f; i < Constants.APP_WIDTH; i+=160){
+            asteroid = WorldUtils.createAsteroid(world,i,350f);
         }
 
+        for(float i=10f; i < Constants.APP_WIDTH; i+=87){
+            asteroid = WorldUtils.createAsteroid(world,i,250f);
+        }
+        for(float i=10f; i < Constants.APP_WIDTH; i+=100){
+            asteroid = WorldUtils.createAsteroid(world,i,150f);
+        }
+ /*       for(float i=0.1f; i < Constants.APP_WIDTH; i+=87){
+            asteroid = WorldUtils.createAsteroid(world, i, 50f);
+        }
+*/
         }
 
     public void blackHoleEnd(){
-        for(float i=-0.50f; i< 1.50; i+=0.55){
-            blackhole = WorldUtils.createBlackHole(world, i, -0.90f);
+        for(float i=200; i< 600; i+=133f){
+            blackhole = WorldUtils.createBlackHole(world, i, 50f);
         }
 
     }
@@ -162,19 +179,16 @@ public class GameWorld extends Stage {
            d = (Body) destroyBodies.get(i);
             world.destroyBody(d);
             destroyBodies.removeIndex(i);
-            score +=1;
-            Gdx.app.log("GameWorld", "score is:" + score);
+            Constants.score +=1;
 
         }
     }
 
 
     public void update(){
-        B2DR.render(world, camera.combined);
         destroy();
         shipControls(ship);
         dropBomb();
-
     }
 
 }
